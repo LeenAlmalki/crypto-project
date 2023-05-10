@@ -60,9 +60,7 @@ public class rsa {
  String decryption = new String(decryptedMessage);
  System.out.println("decrypted message = "+decryption);
 
- System.out.println("hello");
- System.out.println("hello");
-
+ 
 
 }
 	
