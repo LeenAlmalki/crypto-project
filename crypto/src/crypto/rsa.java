@@ -52,6 +52,7 @@ public class rsa {
  Base64.getEncoder().encodeToString(encryptedMessage);
  System.out.println("encrypted message = "+encryption);
 
+ System.out.println("f");
  //Decrypt Hello world message
  Cipher decryptionCipher = Cipher.getInstance("RSA");
  decryptionCipher.init(Cipher.DECRYPT_MODE,publicKey);
