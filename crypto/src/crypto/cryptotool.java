@@ -1,5 +1,6 @@
 package crypto;
 /* trying */
+//hello
 import java.awt.EventQueue;
 import crypto.rsa;
 import javax.swing.JFrame;
@@ -23,11 +24,20 @@ import java.awt.event.ActionEvent;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.SecureRandom;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import javax.swing.JOptionPane;
 
@@ -102,28 +112,117 @@ public class cryptotool {
 		JLabel lblNewLabel_2 = new JLabel("Cipher / Plain Text");
 		
 		JTextArea input = new JTextArea();
-		
+
+		JLabel lblNewLabel = new JLabel("Private Key");
+		JLabel lblNewLabel_1 = new JLabel("Public Key");
+
+		JTextArea privatekey_input = new JTextArea();
+		JTextArea publickey_input = new JTextArea();
+
+		JButton generate = new JButton("Generate Key Pairs");
+		generate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				try{
+					KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+					keyPairGenerator.initialize(1024); // Specify the key size
+					KeyPair keyPair = keyPairGenerator.generateKeyPair();
+					String publicKey = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
+					String privateKey = Base64.getEncoder().encodeToString(keyPair.getPrivate().getEncoded());
+					privatekey_input.setText(privateKey);
+					publickey_input.setText(publicKey);
+				}catch(NoSuchAlgorithmException ex){
+					ex.printStackTrace();
+				}
+			}
+
+			
+		});
+
+		JTextArea output_rsa = new JTextArea();
+
 		JButton encrypt_rsa_button = new JButton("Encrypt");
 		encrypt_rsa_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try{
+
+					// get the plaint text and public key from the gui
+					String plaintextRSA = input.getText();
+					String publicKeyString = publickey_input.getText();
+
+					// Decode the base64- encoded public key
+					byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyString);
+					PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(publicKeyBytes));
+
+					// create a cipher object and initialize it for encryption
+					Cipher cipher = Cipher.getInstance("RSA");
+					cipher.init(cipher.ENCRYPT_MODE,publicKey);
+
+					// encrypt the plainttext and encoded it in base64 format
+					byte[] ciphertextBytes = cipher.doFinal(plaintextRSA.getBytes());
+					String ciphertext = Base64.getEncoder().encodeToString(ciphertextBytes);
+
+					// dispplay the ciphertext in the output
+					output_rsa.setText(ciphertext);
+				} catch(Exception ex){
+					ex.printStackTrace();
+				}
 			}
 		});
+		
+		JButton clear_settings1 = new JButton("Clear");
+		clear_settings1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				privatekey_input.setText("");
+				publickey_input.setText("");
+			}
+			
+		});
+		
+		
+		 
+
 		
 		JButton decrypt_rsa_button = new JButton("Decrypt");
 		decrypt_rsa_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try{
+
+					// get the cipher text and private key from the gui
+					String ciphertext = input.getText();
+					String privateKeyString= privatekey_input.getText();
+
+					// decode the base64 private key
+					byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyString);
+					PrivateKey privateKey = KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(privateKeyBytes));
+
+					//create a cipher object and initialize it for decryption
+					Cipher cipher = Cipher.getInstance("RSA");
+					cipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+					// Decode the Base64-encoded ciphertext and decrypt it
+					byte[] ciphertextBytes = Base64.getDecoder().decode(ciphertext);
+					byte[] decryptedBytes = cipher.doFinal(ciphertextBytes);
+
+					// Convert the decrypted bytes to a string and set it in the decrypted text area
+					String decryptedText = new String(decryptedBytes);
+					output_rsa.setText(decryptedText);
+
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
 			}
 		});
 		
 		JButton Clear = new JButton("Clear");
 		Clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				input.setText("");
+				output_rsa.setText("");
 			}
 		});
 		
 		JLabel lblNewLabel_3 = new JLabel("Output");
 		
-		JTextArea output_rsa = new JTextArea();
 		GroupLayout gl_panel_1_1 = new GroupLayout(panel_1_1);
 		gl_panel_1_1.setHorizontalGroup(
 			gl_panel_1_1.createParallelGroup(Alignment.LEADING)
@@ -174,17 +273,7 @@ public class cryptotool {
 		);
 		panel_1_1.setLayout(gl_panel_1_1);
 		
-		JLabel lblNewLabel = new JLabel("Private Key");
-		
-		JLabel lblNewLabel_1 = new JLabel("Public Key");
-		
-		JButton generate = new JButton("Generate Key Pairs");
-		
-		JButton clear_settings1 = new JButton("Clear");
-		
-		JTextArea privatekey_input = new JTextArea();
-		
-		JTextArea publickey_input = new JTextArea();
+	
 		
 		JScrollPane scrollPane = new JScrollPane();
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
