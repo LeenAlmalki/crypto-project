@@ -1,7 +1,7 @@
 package crypto;
 /* trying */
 import java.awt.EventQueue;
-
+import crypto.rsa;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
@@ -23,8 +23,17 @@ import java.awt.event.ActionEvent;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import java.security.SecureRandom;
+import java.util.Base64;
+import javax.swing.JOptionPane;
+
 
 public class cryptotool {
+	private SecretKey key_aes;
 
 	private JFrame frame;
 
@@ -239,19 +248,73 @@ public class cryptotool {
 		
 		JButton Clear_1 = new JButton("Clear");
 		
+		
 		JTextArea output_aes = new JTextArea();
+		Clear_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				output_aes.setText("");
+			}
+		});
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Cipher / Plain Text");
 		
 		JLabel lblNewLabel_3_1 = new JLabel("Output");
 		
 		JButton encrypt_aes_button = new JButton("Encrypt");
+encrypt_aes_button.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        try {
+            // Get the plaintext from the GUI input
+            byte[] plaintext = lblNewLabel_2_1.getText().getBytes();
+
+            // Call the encrypt() function with the plaintext and the key
+            byte[] ciphertext = encrypt_aes(plaintext, key_aes);
+			String base64Ciphertext = Base64.getEncoder().encodeToString(ciphertext);
+
+            output_aes.setText(base64Ciphertext);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+	// The encrypt() function
+byte[] encrypt_aes(byte[] plaintext, SecretKey key_aes) throws Exception {
+    Cipher cipher = Cipher.getInstance("AES");
+    cipher.init(Cipher.ENCRYPT_MODE, key_aes);
+    return cipher.doFinal(plaintext);
+}
+});
+
+
+
 		
+
 		JButton decrypt_aes_button = new JButton("Decrypt");
 		decrypt_aes_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					// Get the ciphertext from the GUI input
+					byte[] ciphertext = lblNewLabel_2_1.getText().getBytes();
+		
+					// Call the decrypt_aes() function with the ciphertext and the key
+					byte[] plaintext = decrypt_aes(ciphertext, key_aes);
+					String base64Ciphertext = Base64.getEncoder().encodeToString(plaintext);
+
+					output_aes.setText(base64Ciphertext);
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		
+			// The decrypt_aes() function
+			byte[] decrypt_aes(byte[] ciphertext, SecretKey key_aes) throws Exception {
+				Cipher cipher = Cipher.getInstance("AES");
+				cipher.init(Cipher.DECRYPT_MODE, key_aes);
+				return cipher.doFinal(ciphertext);
 			}
 		});
+
 		GroupLayout gl_panel_1_1_1 = new GroupLayout(panel_1_1_1);
 		gl_panel_1_1_1.setHorizontalGroup(
 			gl_panel_1_1_1.createParallelGroup(Alignment.LEADING)
@@ -326,9 +389,29 @@ public class cryptotool {
 		
 		JTextArea textArea = new JTextArea();
 		
-		JButton generate_aes_buton = new JButton("Generate Key");
+		JButton generate_aes_button = new JButton("Generate Key");
+generate_aes_button.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        try {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+            keyGenerator.init(128, new SecureRandom());
+            key_aes = keyGenerator.generateKey();
+            String keyString = Base64.getEncoder().encodeToString(key_aes.getEncoded());
+			textArea.setText(keyString);
+        } catch (NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
+        }
+    }
+});
+
+		
 		
 		JButton btnNewButton = new JButton("Clear");
+		btnNewButton.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        output_aes.setText(" hi");
+    }
+});
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -339,7 +422,7 @@ public class cryptotool {
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(51)
-							.addComponent(generate_aes_buton)
+							.addComponent(generate_aes_button)
 							.addGap(18)
 							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
 						.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 337, GroupLayout.PREFERRED_SIZE))
@@ -357,11 +440,15 @@ public class cryptotool {
 							.addComponent(lblNewLabel_4)))
 					.addGap(48)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(generate_aes_buton)
+						.addComponent(generate_aes_button)
 						.addComponent(btnNewButton))
 					.addContainerGap(69, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
 		aes.setLayout(gl_aes);
 	}
+
+
 }
+
+
