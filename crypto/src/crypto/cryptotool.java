@@ -383,10 +383,11 @@ byte[] encrypt_aes(byte[] plaintext, SecretKey key_aes) throws Exception {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					// Get the ciphertext from the GUI input
-					byte[] ciphertext = Base64.getDecoder().decode(input_aes.getText());		
+					byte[] ciphertext = Base64.getDecoder().decode(input_aes.getText());
+					byte[] decryptedText = decrypt_aes(ciphertext, key_aes);		
 					// Call the decrypt_aes() function with the ciphertext and the key
 
-					output_aes.setText("ciphertext");
+					output_aes.setText(new String(decryptedText));
 					// Set the plaintext to the output GUI component
 				} catch (Exception ex) {
 					ex.printStackTrace();
