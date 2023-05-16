@@ -1,6 +1,4 @@
 package crypto;
-/* trying */
-//hello
 import java.awt.EventQueue;
 import crypto.rsa;
 import javax.swing.JFrame;
@@ -25,14 +23,12 @@ import java.awt.event.ActionEvent;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
-
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -46,8 +42,6 @@ import java.awt.ScrollPane;
 
 
 public class cryptotool {
-	private SecretKey key_aes;
-
 	private JFrame frame;
 
 	/**
@@ -84,6 +78,9 @@ public class cryptotool {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane, BorderLayout.NORTH);
 		
+		/**
+		 * RSA Panel
+		 */
 		JPanel rsa = new JPanel();
 		tabbedPane.addTab("RSA", null, rsa, null);
 		
@@ -118,19 +115,14 @@ public class cryptotool {
 		JTextArea publickey_input = new JTextArea();
 		publickey_input.setLineWrap(true);
 		
-		JTextArea input = new JTextArea();
-		input.setLineWrap(true);
+		JTextArea input_rsa = new JTextArea();
+		input_rsa.setLineWrap(true);
 		JTextArea output_rsa = new JTextArea();
 		output_rsa.setLineWrap(true);
 		
-		
-
 		JLabel lblNewLabel = new JLabel("Private Key");
 		JLabel lblNewLabel_1 = new JLabel("Public Key");
 		
-		
-		
-
 		JButton generate = new JButton("Generate Key Pairs");
 		generate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -156,7 +148,7 @@ public class cryptotool {
 				try{
 
 					// get the plaint text and public key from the gui
-					String plaintextRSA = input.getText();
+					String plaintextRSA = input_rsa.getText();
 					String publicKeyString = publickey_input.getText();
 
 					// Decode the base64- encoded public key
@@ -164,15 +156,15 @@ public class cryptotool {
 					PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(publicKeyBytes));
 
 					// create a cipher object and initialize it for encryption
-					Cipher cipher = Cipher.getInstance("RSA");
-					cipher.init(cipher.ENCRYPT_MODE,publicKey);
+					Cipher cipher_rsa = Cipher.getInstance("RSA");
+					cipher_rsa.init(cipher_rsa.ENCRYPT_MODE,publicKey);
 
 					// encrypt the plainttext and encoded it in base64 format
-					byte[] ciphertextBytes = cipher.doFinal(plaintextRSA.getBytes());
-					String ciphertext = Base64.getEncoder().encodeToString(ciphertextBytes);
+					byte[] ciphertextBytes_rsa = cipher_rsa.doFinal(plaintextRSA.getBytes());
+					String ciphertext_rsa = Base64.getEncoder().encodeToString(ciphertextBytes_rsa);
 
 					// dispplay the ciphertext in the output
-					output_rsa.setText(ciphertext);
+					output_rsa.setText(ciphertext_rsa);
 				} catch(Exception ex){
 					JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
@@ -198,7 +190,7 @@ public class cryptotool {
 				try{
 
 					// get the cipher text and private key from the gui
-					String ciphertext = input.getText();
+					String ciphertext_rsa = input_rsa.getText();
 					String privateKeyString= privatekey_input.getText();
 
 					// decode the base64 private key
@@ -206,16 +198,16 @@ public class cryptotool {
 					PrivateKey privateKey = KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(privateKeyBytes));
 
 					//create a cipher object and initialize it for decryption
-					Cipher cipher = Cipher.getInstance("RSA");
-					cipher.init(Cipher.DECRYPT_MODE, privateKey);
+					Cipher cipher_rsa = Cipher.getInstance("RSA");
+					cipher_rsa.init(Cipher.DECRYPT_MODE, privateKey);
 
 					// Decode the Base64-encoded ciphertext and decrypt it
-					byte[] ciphertextBytes = Base64.getDecoder().decode(ciphertext);
-					byte[] decryptedBytes = cipher.doFinal(ciphertextBytes);
+					byte[] ciphertextBytes_rsa = Base64.getDecoder().decode(ciphertext_rsa);
+					byte[] decryptedBytes_rsa = cipher_rsa.doFinal(ciphertextBytes_rsa);
 
 					// Convert the decrypted bytes to a string and set it in the decrypted text area
-					String decryptedText = new String(decryptedBytes);
-					output_rsa.setText(decryptedText);
+					String decryptedText_aes = new String(decryptedBytes_rsa);
+					output_rsa.setText(decryptedText_aes);
 
 				}catch(Exception ex){
 					JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -227,7 +219,7 @@ public class cryptotool {
 		JButton Clear = new JButton("Clear");
 		Clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				input.setText("");
+				input_rsa.setText("");
 				output_rsa.setText("");
 			}
 		});
@@ -254,7 +246,7 @@ public class cryptotool {
 							.addComponent(lblNewLabel_2))
 						.addGroup(gl_panel_1_1.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(input, GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE))
+							.addComponent(input_rsa, GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE))
 						.addGroup(gl_panel_1_1.createSequentialGroup()
 							.addGap(193)
 							.addComponent(Clear))
@@ -269,7 +261,7 @@ public class cryptotool {
 					.addContainerGap()
 					.addComponent(lblNewLabel_2)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(input, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+					.addComponent(input_rsa, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
 					.addGroup(gl_panel_1_1.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_1_1.createSequentialGroup()
 							.addGap(14)
@@ -344,12 +336,6 @@ public class cryptotool {
 		panel_2.setLayout(gl_panel_2);
 		rsa.setLayout(gl_rsa);
 		
-		JTextArea input_aes = new JTextArea();
-		input_aes.setLineWrap(true);
-		
-		JTextArea output_aes = new JTextArea();
-		output_aes.setLineWrap(true);
-		
 		JPanel aes = new JPanel();
 		tabbedPane.addTab(" AES", null, aes, null);
 		
@@ -359,6 +345,12 @@ public class cryptotool {
 		JPanel panel_1_1_1 = new JPanel();
 		panel_1_1_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Encrypt / Decrypt", TitledBorder.LEFT, TitledBorder.TOP, null, Color.BLACK));
 		
+		JTextArea input_aes = new JTextArea();
+		input_aes.setLineWrap(true);
+		
+		JTextArea output_aes = new JTextArea();
+		output_aes.setLineWrap(true);
+
 		JButton Clear_1 = new JButton("Clear");
 		Clear_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -369,31 +361,32 @@ public class cryptotool {
 		JLabel lblNewLabel_2_1 = new JLabel("Cipher / Plain Text");
 		
 		JLabel lblNewLabel_3_1 = new JLabel("Output");
-		
+		private SecretKey key_aes;
+
 		JButton encrypt_aes_button = new JButton("Encrypt");
-encrypt_aes_button.addActionListener(new ActionListener() {
-    public void actionPerformed(ActionEvent e) {
-        try {
-            // Get the plaintext from the GUI input
-            byte[] plaintext = input_aes.getText().getBytes();
+		encrypt_aes_button.addActionListener(new ActionListener() {
+    	public void actionPerformed(ActionEvent e) {
+			try {
+				// Get the plaintext from the GUI input
+				byte[] plaintext_aes = input_aes.getText().getBytes();
 
-            // Call the encrypt() function with the plaintext and the key
-            byte[] ciphertext = encrypt_aes(plaintext, key_aes);
-			String base64Ciphertext = Base64.getEncoder().encodeToString(ciphertext);
+				// Call the encrypt() function with the plaintext and the key
+				byte[] ciphertext_aes = encrypt_aes(plaintext_aes, key_aes);
+				String base64Ciphertext_aes = Base64.getEncoder().encodeToString(ciphertext_aes);
 
-            output_aes.setText(base64Ciphertext);
-        } catch (Exception ex) {
-        	JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+				output_aes.setText(base64Ciphertext_aes);
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
 
-	// The encrypt() function
-byte[] encrypt_aes(byte[] plaintext, SecretKey key_aes) throws Exception {
-    Cipher cipher = Cipher.getInstance("AES");
-    cipher.init(Cipher.ENCRYPT_MODE, key_aes);
-    return cipher.doFinal(plaintext);
-}
-});
+			// The encrypt() function
+		byte[] encrypt_aes(byte[] plaintext_aes, SecretKey key_aes) throws Exception {
+			Cipher cipher_aes = Cipher.getInstance("AES");
+			cipher_aes.init(Cipher.ENCRYPT_MODE, key_aes);
+			return cipher_aes.doFinal(plaintext_aes);
+		}
+		});
 
 
 
@@ -404,11 +397,11 @@ byte[] encrypt_aes(byte[] plaintext, SecretKey key_aes) throws Exception {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					// Get the ciphertext from the GUI input
-					byte[] ciphertext = Base64.getDecoder().decode(input_aes.getText());
-					byte[] decryptedText = decrypt_aes(ciphertext, key_aes);		
+					byte[] ciphertext_aes = Base64.getDecoder().decode(input_aes.getText());
+					byte[] decryptedText_aes = decrypt_aes(ciphertext_aes, key_aes);		
 					// Call the decrypt_aes() function with the ciphertext and the key
 
-					output_aes.setText(new String(decryptedText));
+					output_aes.setText(new String(decryptedText_aes));
 					// Set the plaintext to the output GUI component
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -416,10 +409,10 @@ byte[] encrypt_aes(byte[] plaintext, SecretKey key_aes) throws Exception {
 			}
 		
 			// The decrypt_aes() function
-			byte[] decrypt_aes(byte[] ciphertext, SecretKey key_aes) throws Exception {
-				Cipher cipher = Cipher.getInstance("AES");
-				cipher.init(Cipher.DECRYPT_MODE, key_aes);
-				return cipher.doFinal(ciphertext);
+			byte[] decrypt_aes(byte[] ciphertext_aes, SecretKey key_aes) throws Exception {
+				Cipher cipher_aes = Cipher.getInstance("AES");
+				cipher_aes.init(Cipher.DECRYPT_MODE, key_aes);
+				return cipher_aes.doFinal(ciphertext_aes);
 			}
 		});
 		
@@ -497,17 +490,17 @@ byte[] encrypt_aes(byte[] plaintext, SecretKey key_aes) throws Exception {
 		
 		JLabel lblNewLabel_4 = new JLabel("Secret Key");
 		
-		JTextArea textArea = new JTextArea();
+		JTextArea textArea_key_aes = new JTextArea();
 		
 		JButton generate_aes_button = new JButton("Generate Key");
-generate_aes_button.addActionListener(new ActionListener() {
-    public void actionPerformed(ActionEvent e) {
+		generate_aes_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
         try {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-            keyGenerator.init(128, new SecureRandom());
-            key_aes = keyGenerator.generateKey();
-            String keyString = Base64.getEncoder().encodeToString(key_aes.getEncoded());
-			textArea.setText(keyString);
+            KeyGenerator keyGenerator_aes = KeyGenerator.getInstance("AES");
+            keyGenerator_aes.init(128, new SecureRandom());
+            key_aes = keyGenerator_aes.generateKey();
+            String keyString_aes = Base64.getEncoder().encodeToString(key_aes.getEncoded());
+			textArea_key_aes.setText(keyString_aes);
         } catch (NoSuchAlgorithmException ex) {
             ex.printStackTrace();
         }
@@ -535,7 +528,7 @@ generate_aes_button.addActionListener(new ActionListener() {
 							.addComponent(generate_aes_button)
 							.addGap(18)
 							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
-						.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 337, GroupLayout.PREFERRED_SIZE))
+						.addComponent(textArea_key_aes, GroupLayout.PREFERRED_SIZE, 337, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(22, Short.MAX_VALUE))
 		);
 		gl_panel.setVerticalGroup(
@@ -544,7 +537,7 @@ generate_aes_button.addActionListener(new ActionListener() {
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(22)
-							.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE))
+							.addComponent(textArea_key_aes, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(39)
 							.addComponent(lblNewLabel_4)))
