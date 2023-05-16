@@ -115,7 +115,7 @@ public class cryptotool {
 
 		JLabel lblNewLabel = new JLabel("Private Key");
 		JLabel lblNewLabel_1 = new JLabel("Public Key");
-
+		
 		JTextArea privatekey_input = new JTextArea();
 		JTextArea publickey_input = new JTextArea();
 
@@ -287,7 +287,7 @@ public class cryptotool {
 								.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblNewLabel))
 							.addGap(10)
-							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 								.addComponent(publickey_input, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
@@ -306,7 +306,7 @@ public class cryptotool {
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel)
+							.addComponent(lblNewLabel)
 								.addComponent(privatekey_input, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
 							.addGap(12))
 						.addGroup(gl_panel_2.createSequentialGroup()
@@ -316,9 +316,9 @@ public class cryptotool {
 						.addComponent(lblNewLabel_1)
 						.addComponent(publickey_input, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
 					.addGap(26)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-						.addComponent(generate)
-						.addComponent(clear_settings1))
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+								.addComponent(generate)
+								.addComponent(clear_settings1))
 					.addGap(30))
 		);
 		panel_2.setLayout(gl_panel_2);
