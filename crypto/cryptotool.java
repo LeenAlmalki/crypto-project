@@ -206,8 +206,8 @@ public class cryptotool {
 					byte[] decryptedBytes_rsa = cipher_rsa.doFinal(ciphertextBytes_rsa);
 
 					// Convert the decrypted bytes to a string and set it in the decrypted text area
-					String decryptedText_aes = new String(decryptedBytes_rsa);
-					output_rsa.setText(decryptedText_aes);
+					String decryptedText_rsa = new String(decryptedBytes_rsa);
+					output_rsa.setText(decryptedText_rsa);
 
 				}catch(Exception ex){
 					JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
