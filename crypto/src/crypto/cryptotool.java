@@ -354,7 +354,7 @@ encrypt_aes_button.addActionListener(new ActionListener() {
     public void actionPerformed(ActionEvent e) {
         try {
             // Get the plaintext from the GUI input
-            byte[] plaintext = lblNewLabel_2_1.getText().getBytes();
+            byte[] plaintext = input_aes.getText().getBytes();
 
             // Call the encrypt() function with the plaintext and the key
             byte[] ciphertext = encrypt_aes(plaintext, key_aes);
@@ -383,14 +383,11 @@ byte[] encrypt_aes(byte[] plaintext, SecretKey key_aes) throws Exception {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					// Get the ciphertext from the GUI input
-					byte[] ciphertext = lblNewLabel_2_1.getText().getBytes();
-		
+					byte[] ciphertext = Base64.getDecoder().decode(input_aes.getText());		
 					// Call the decrypt_aes() function with the ciphertext and the key
-					byte[] plaintext = decrypt_aes(ciphertext, key_aes);
-					String base64Ciphertext = Base64.getEncoder().encodeToString(plaintext);
 
-					output_aes.setText(base64Ciphertext);
-
+					output_aes.setText("ciphertext");
+					// Set the plaintext to the output GUI component
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
