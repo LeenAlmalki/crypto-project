@@ -17,6 +17,7 @@ import java.awt.GridLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -40,6 +41,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollBar;
+import java.awt.ScrollPane;
 
 
 public class cryptotool {
@@ -75,7 +78,7 @@ public class cryptotool {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 506, 556);
+		frame.setBounds(100, 100, 513, 556);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -92,12 +95,12 @@ public class cryptotool {
 		GroupLayout gl_rsa = new GroupLayout(rsa);
 		gl_rsa.setHorizontalGroup(
 			gl_rsa.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_rsa.createSequentialGroup()
+				.addGroup(Alignment.TRAILING, gl_rsa.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_rsa.createParallelGroup(Alignment.TRAILING)
 						.addComponent(panel_1_1, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-						.addComponent(panel_2, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 467, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(10, Short.MAX_VALUE))
+						.addComponent(panel_2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE))
+					.addGap(26))
 		);
 		gl_rsa.setVerticalGroup(
 			gl_rsa.createParallelGroup(Alignment.LEADING)
@@ -105,19 +108,28 @@ public class cryptotool {
 					.addContainerGap()
 					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 219, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_1_1, GroupLayout.PREFERRED_SIZE, 254, Short.MAX_VALUE)
-					.addContainerGap())
+					.addComponent(panel_1_1, GroupLayout.PREFERRED_SIZE, 248, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(18, Short.MAX_VALUE))
 		);
 		
 		JLabel lblNewLabel_2 = new JLabel("Cipher / Plain Text");
+		JTextArea privatekey_input = new JTextArea();
+		privatekey_input.setLineWrap(true);
+		JTextArea publickey_input = new JTextArea();
+		publickey_input.setLineWrap(true);
 		
 		JTextArea input = new JTextArea();
+		input.setLineWrap(true);
+		JTextArea output_rsa = new JTextArea();
+		output_rsa.setLineWrap(true);
+		
+		
 
 		JLabel lblNewLabel = new JLabel("Private Key");
 		JLabel lblNewLabel_1 = new JLabel("Public Key");
 		
-		JTextArea privatekey_input = new JTextArea();
-		JTextArea publickey_input = new JTextArea();
+		
+		
 
 		JButton generate = new JButton("Generate Key Pairs");
 		generate.addActionListener(new ActionListener() {
@@ -137,8 +149,6 @@ public class cryptotool {
 
 			
 		});
-
-		JTextArea output_rsa = new JTextArea();
 
 		JButton encrypt_rsa_button = new JButton("Encrypt");
 		encrypt_rsa_button.addActionListener(new ActionListener() {
@@ -164,7 +174,7 @@ public class cryptotool {
 					// dispplay the ciphertext in the output
 					output_rsa.setText(ciphertext);
 				} catch(Exception ex){
-					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -208,7 +218,8 @@ public class cryptotool {
 					output_rsa.setText(decryptedText);
 
 				}catch(Exception ex){
-					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			        
 				}
 			}
 		});
@@ -223,30 +234,33 @@ public class cryptotool {
 		
 		JLabel lblNewLabel_3 = new JLabel("Output");
 		
+		
+		
 		GroupLayout gl_panel_1_1 = new GroupLayout(panel_1_1);
 		gl_panel_1_1.setHorizontalGroup(
 			gl_panel_1_1.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_1_1.createSequentialGroup()
 					.addGroup(gl_panel_1_1.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_1_1.createSequentialGroup()
+							.addGap(143)
+							.addComponent(encrypt_rsa_button)
+							.addGap(18)
+							.addComponent(decrypt_rsa_button))
+						.addGroup(gl_panel_1_1.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_1_1.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblNewLabel_2))
+						.addGroup(gl_panel_1_1.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(input, GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE))
 						.addGroup(gl_panel_1_1.createSequentialGroup()
-							.addGap(184)
+							.addGap(193)
 							.addComponent(Clear))
 						.addGroup(gl_panel_1_1.createSequentialGroup()
 							.addContainerGap()
-							.addGroup(gl_panel_1_1.createParallelGroup(Alignment.LEADING)
-								.addComponent(output_rsa, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_panel_1_1.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblNewLabel_2)
-									.addGroup(gl_panel_1_1.createSequentialGroup()
-										.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
-										.addComponent(encrypt_rsa_button)
-										.addGap(18)
-										.addComponent(decrypt_rsa_button)
-										.addGap(140))))))
+							.addComponent(output_rsa, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
 		gl_panel_1_1.setVerticalGroup(
@@ -255,27 +269,31 @@ public class cryptotool {
 					.addContainerGap()
 					.addComponent(lblNewLabel_2)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(input, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+					.addComponent(input, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
 					.addGroup(gl_panel_1_1.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_1_1.createSequentialGroup()
-							.addGap(18)
-							.addComponent(lblNewLabel_3))
+							.addGap(14)
+							.addComponent(lblNewLabel_3)
+							.addGap(2))
 						.addGroup(gl_panel_1_1.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_1_1.createParallelGroup(Alignment.BASELINE)
 								.addComponent(encrypt_rsa_button)
 								.addComponent(decrypt_rsa_button))))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(output_rsa, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(output_rsa, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+					.addGap(12)
 					.addComponent(Clear)
-					.addGap(25))
+					.addGap(45))
 		);
 		panel_1_1.setLayout(gl_panel_1_1);
 		
 	
 		
 		JScrollPane scrollPane = new JScrollPane();
+	
+		
+		
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -287,42 +305,50 @@ public class cryptotool {
 								.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblNewLabel))
 							.addGap(10)
-								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-								.addComponent(publickey_input, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
-								.addComponent(privatekey_input, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)))
+								.addComponent(publickey_input, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(privatekey_input, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_panel_2.createSequentialGroup()
-							.addGap(100)
+							.addGap(103)
 							.addComponent(generate)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(clear_settings1, GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
+					.addContainerGap(24, Short.MAX_VALUE))
 		);
 		gl_panel_2.setVerticalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
-						.addGroup(gl_panel_2.createSequentialGroup()
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+						.addComponent(privatekey_input, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+						.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
 							.addComponent(lblNewLabel)
-								.addComponent(privatekey_input, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
-							.addGap(12))
+							.addGap(22)))
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(35)))
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_1)
-						.addComponent(publickey_input, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
-					.addGap(26)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(publickey_input, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 								.addComponent(generate)
 								.addComponent(clear_settings1))
-					.addGap(30))
+							.addGap(57))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGap(31)
+							.addComponent(lblNewLabel_1)
+							.addContainerGap())))
 		);
 		panel_2.setLayout(gl_panel_2);
 		rsa.setLayout(gl_rsa);
+		
+		JTextArea input_aes = new JTextArea();
+		input_aes.setLineWrap(true);
+		
+		JTextArea output_aes = new JTextArea();
+		output_aes.setLineWrap(true);
 		
 		JPanel aes = new JPanel();
 		tabbedPane.addTab(" AES", null, aes, null);
@@ -333,12 +359,7 @@ public class cryptotool {
 		JPanel panel_1_1_1 = new JPanel();
 		panel_1_1_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Encrypt / Decrypt", TitledBorder.LEFT, TitledBorder.TOP, null, Color.BLACK));
 		
-		JTextArea input_aes = new JTextArea();
-		
 		JButton Clear_1 = new JButton("Clear");
-		
-		
-		JTextArea output_aes = new JTextArea();
 		Clear_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				output_aes.setText("");
@@ -362,7 +383,7 @@ encrypt_aes_button.addActionListener(new ActionListener() {
 
             output_aes.setText(base64Ciphertext);
         } catch (Exception ex) {
-            ex.printStackTrace();
+        	JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -390,7 +411,7 @@ byte[] encrypt_aes(byte[] plaintext, SecretKey key_aes) throws Exception {
 					output_aes.setText(new String(decryptedText));
 					// Set the plaintext to the output GUI component
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		
@@ -401,55 +422,57 @@ byte[] encrypt_aes(byte[] plaintext, SecretKey key_aes) throws Exception {
 				return cipher.doFinal(ciphertext);
 			}
 		});
+		
+		
 
 		GroupLayout gl_panel_1_1_1 = new GroupLayout(panel_1_1_1);
 		gl_panel_1_1_1.setHorizontalGroup(
 			gl_panel_1_1_1.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 467, Short.MAX_VALUE)
 				.addGroup(gl_panel_1_1_1.createSequentialGroup()
 					.addGroup(gl_panel_1_1_1.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_1_1_1.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(input_aes, GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE))
-						.addGroup(gl_panel_1_1_1.createSequentialGroup()
-							.addGap(184)
-							.addComponent(Clear_1))
-						.addGroup(gl_panel_1_1_1.createSequentialGroup()
-							.addContainerGap()
 							.addGroup(gl_panel_1_1_1.createParallelGroup(Alignment.LEADING)
-								.addComponent(output_aes, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblNewLabel_2_1)
 								.addGroup(gl_panel_1_1_1.createSequentialGroup()
 									.addComponent(lblNewLabel_3_1, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
 									.addComponent(encrypt_aes_button)
 									.addGap(18)
 									.addComponent(decrypt_aes_button)
-									.addGap(140)))))
+									.addGap(148))))
+						.addGroup(gl_panel_1_1_1.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(input_aes, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_1_1_1.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(output_aes, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_1_1_1.createSequentialGroup()
+							.addGap(187)
+							.addComponent(Clear_1)))
 					.addContainerGap())
 		);
 		gl_panel_1_1_1.setVerticalGroup(
 			gl_panel_1_1_1.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 254, Short.MAX_VALUE)
 				.addGroup(gl_panel_1_1_1.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblNewLabel_2_1)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(input_aes, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+					.addComponent(input_aes, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
 					.addGroup(gl_panel_1_1_1.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_1_1_1.createSequentialGroup()
-							.addGap(18)
+							.addGap(20)
 							.addComponent(lblNewLabel_3_1))
 						.addGroup(gl_panel_1_1_1.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_1_1_1.createParallelGroup(Alignment.BASELINE)
-								.addComponent(encrypt_aes_button)
-								.addComponent(decrypt_aes_button))))
+								.addComponent(decrypt_aes_button)
+								.addComponent(encrypt_aes_button))))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(output_aes, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+					.addComponent(output_aes, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(Clear_1)
-					.addGap(25))
+					.addGap(35))
 		);
 		panel_1_1_1.setLayout(gl_panel_1_1_1);
 		GroupLayout gl_aes = new GroupLayout(aes);
@@ -457,9 +480,9 @@ byte[] encrypt_aes(byte[] plaintext, SecretKey key_aes) throws Exception {
 			gl_aes.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_aes.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_aes.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
-						.addComponent(panel_1_1_1, GroupLayout.PREFERRED_SIZE, 467, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_aes.createParallelGroup(Alignment.TRAILING)
+						.addComponent(panel_1_1_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+						.addComponent(panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_aes.setVerticalGroup(
@@ -534,8 +557,6 @@ generate_aes_button.addActionListener(new ActionListener() {
 		panel.setLayout(gl_panel);
 		aes.setLayout(gl_aes);
 	}
-
-
 }
 
 
