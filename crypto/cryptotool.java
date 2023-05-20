@@ -43,6 +43,7 @@ import java.awt.ScrollPane;
 
 public class cryptotool {
 	private JFrame frame;
+		SecretKey key_aes;
 
 	/**
 	 * Launch the application.
@@ -361,7 +362,6 @@ public class cryptotool {
 		JLabel lblNewLabel_2_1 = new JLabel("Cipher / Plain Text");
 		
 		JLabel lblNewLabel_3_1 = new JLabel("Output");
-		private SecretKey key_aes;
 
 		JButton encrypt_aes_button = new JButton("Encrypt");
 		encrypt_aes_button.addActionListener(new ActionListener() {
@@ -390,23 +390,20 @@ public class cryptotool {
 
 
 
-		
-
 		JButton decrypt_aes_button = new JButton("Decrypt");
-		decrypt_aes_button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					// Get the ciphertext from the GUI input
-					byte[] ciphertext_aes = Base64.getDecoder().decode(input_aes.getText());
-					byte[] decryptedText_aes = decrypt_aes(ciphertext_aes, key_aes);		
-					// Call the decrypt_aes() function with the ciphertext and the key
+        decrypt_aes_button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    byte[] ciphertext_aes = Base64.getDecoder().decode(input_aes.getText());
+                    byte[] decryptedText_aes = decrypt_aes(ciphertext_aes, key_aes);
+                    output_aes.setText(new String(decryptedText_aes));
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+       
 
-					output_aes.setText(new String(decryptedText_aes));
-					// Set the plaintext to the output GUI component
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				}
-			}
+		
 		
 			// The decrypt_aes() function
 			byte[] decrypt_aes(byte[] ciphertext_aes, SecretKey key_aes) throws Exception {
@@ -488,24 +485,25 @@ public class cryptotool {
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		
+		
 		JLabel lblNewLabel_4 = new JLabel("Secret Key");
 		
 		JTextArea textArea_key_aes = new JTextArea();
 		
 		JButton generate_aes_button = new JButton("Generate Key");
-		generate_aes_button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-        try {
-            KeyGenerator keyGenerator_aes = KeyGenerator.getInstance("AES");
-            keyGenerator_aes.init(128, new SecureRandom());
-            key_aes = keyGenerator_aes.generateKey();
-            String keyString_aes = Base64.getEncoder().encodeToString(key_aes.getEncoded());
-			textArea_key_aes.setText(keyString_aes);
-        } catch (NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
-        }
-    }
-});
+        generate_aes_button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    KeyGenerator keyGenerator_aes = KeyGenerator.getInstance("AES");
+                    keyGenerator_aes.init(128, new SecureRandom());
+                    key_aes = keyGenerator_aes.generateKey();
+                    String keyString_aes = Base64.getEncoder().encodeToString(key_aes.getEncoded());
+                    textArea_key_aes.setText(keyString_aes);
+                } catch (NoSuchAlgorithmException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
 		
 		
